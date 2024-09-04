@@ -1,4 +1,3 @@
-// addEmployee.js
 const inquirer = require('inquirer');
 const pool = require('./db');
 

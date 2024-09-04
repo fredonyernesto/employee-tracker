@@ -1,24 +1,13 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const { Pool } = require('pg');
+const pool = require('./db');
 const { addEmployee } = require('./addEmployee');
+const { updateRole } = require('./updateRole');
+const { addRole } = require('./addRole'); // Import the addRole function
 
-const pool = new Pool(
-    {
-      // TODO: Enter PostgreSQL username
-      user: 'postgres',
-      // TODO: Enter PostgreSQL password
-      password: 'Fredboom11',
-      host: 'localhost',
-      database: 'books_db'
-    },
-    console.log(`Connected to the books_db database.`)
-  )
-
-  class CLI {
-
-    run(){
-      return inquirer
+class CLI {
+  run() {
+    return inquirer
       .prompt([
         {
           type: 'list',
@@ -37,27 +26,43 @@ const pool = new Pool(
       .then(answers => {
         const choice = answers.Question;
 
-        switch(choice){
+        switch (choice) {
           case 'View All Employees':
             pool.query('SELECT * FROM employees', (err, { rows }) => {
               if (err) {
-                console.error(err);
+                console.error('Error fetching employees:', err);
                 return;
               }
               console.log(rows);
             });
             break;
 
-            case 'Add Employee':
-              addEmployee()
-              break;
+          case 'Add Employee':
+            addEmployee();
+            break;
 
-              case 'Update Employee Role':
-                
-              
+          case 'Update Employee Role':
+            updateRole();
+            break;
+
+          case 'Add Role':
+            addRole();
+            break;
+
+          case 'View All Departments':
+            pool.query('SELECT * FROM department', (err, { rows }) => {
+              if (err) {
+                console.error('Error fetching departments:', err);
+                return;
+              }
+              console.log(rows);
+            });
+            break;
+
+          
         }
-      })
-    }
+      });
   }
+}
 
-  
+module.exports = CLI;
