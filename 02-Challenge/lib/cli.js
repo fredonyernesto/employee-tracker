@@ -3,7 +3,9 @@ const inquirer = require('inquirer');
 const pool = require('./db');
 const { addEmployee } = require('./addEmployee');
 const { updateRole } = require('./updateRole');
-const { addRole } = require('./addRole'); // Import the addRole function
+const { addRole } = require('./addRole');
+const { addDepartment } = require('./addDepartment');
+const { del } = require('./del'); 
 
 class CLI {
   run() {
@@ -19,7 +21,8 @@ class CLI {
             'Update Employee Role',
             'Add Role',
             'View All Departments',
-            'Add Department'
+            'Add Department',
+            'DELETE!'
           ]
         }
       ])
@@ -59,8 +62,23 @@ class CLI {
             });
             break;
 
-          
+          case 'Add Department':
+            addDepartment();
+            break;
+            
+          case 'DELETE!':
+            del(); 
+            break;
+
+          default: 
+            console.log('No valid option selected');
         }
+      })
+      .then(() => {
+        return this.run(); 
+      })
+      .catch(error => {
+        console.error('Error:', error);
       });
   }
 }

@@ -16,6 +16,7 @@ async function addEmployee() {
     const managerChoices = managers.map(manager => ({ name: manager.name, value: manager.id }));
     managerChoices.push({ name: 'None', value: null });
 
+    // Prompt user for input
     const answers = await inquirer.prompt([
       {
         type: 'input',
@@ -43,15 +44,15 @@ async function addEmployee() {
 
     const { firstName, lastName, roleId, managerId } = answers;
 
+    // Insert new employee into the database
     await pool.query(
-      `INSERT INTO employees (first_name, last_name, role_id, manager_id) 
-       VALUES ($1, $2, $3, $4)`,
+      'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
       [firstName, lastName, roleId, managerId]
     );
 
     console.log('Employee added successfully');
   } catch (error) {
-    console.error(error);
+    console.error('Error adding employee:', error);
   }
 }
 
