@@ -1,16 +1,15 @@
-const fs = require('fs');
 const inquirer = require('inquirer');
-const pool = require('./db');
+const pool = require('../db/pool');
 const { addEmployee } = require('./addEmployee');
 const { updateRole } = require('./updateRole');
 const { addRole } = require('./addRole');
 const { addDepartment } = require('./addDepartment');
-const { del } = require('./del'); 
+const { del } = require('./del');
 
 class CLI {
-  run() {
-    return inquirer
-      .prompt([
+  async run() {
+    try {
+      const answers = await inquirer.prompt([
         {
           type: 'list',
           name: 'Question',
@@ -25,61 +24,59 @@ class CLI {
             'DELETE!'
           ]
         }
-      ])
-      .then(answers => {
-        const choice = answers.Question;
+      ]);
 
-        switch (choice) {
-          case 'View All Employees':
-            pool.query('SELECT * FROM employees', (err, { rows }) => {
-              if (err) {
-                console.error('Error fetching employees:', err);
-                return;
-              }
-              console.log(rows);
-            });
-            break;
+      const choice = answers.Question;
 
-          case 'Add Employee':
-            addEmployee();
-            break;
+      switch (choice) {
+        case 'View All Employees':
+          pool.query('SELECT * FROM employee', (err, { rows }) => {
+            if (err) {
+              console.error('Error fetching employees:', err);
+              return;
+            }
+            console.log(rows);
+          });
+          break;
 
-          case 'Update Employee Role':
-            updateRole();
-            break;
+        case 'Add Employee':
+          await addEmployee();
+          break;
 
-          case 'Add Role':
-            addRole();
-            break;
+        case 'Update Employee Role':
+          await updateRole();
+          break;
 
-          case 'View All Departments':
-            pool.query('SELECT * FROM department', (err, { rows }) => {
-              if (err) {
-                console.error('Error fetching departments:', err);
-                return;
-              }
-              console.log(rows);
-            });
-            break;
+        case 'Add Role':
+          await addRole();
+          break;
 
-          case 'Add Department':
-            addDepartment();
-            break;
-            
-          case 'DELETE!':
-            del(); 
-            break;
+        case 'View All Departments':
+          pool.query('SELECT * FROM department', (err, { rows }) => {
+            if (err) {
+              console.error('Error fetching departments:', err);
+              return;
+            }
+            console.log(rows);
+          });
+          break;
 
-          default: 
-            console.log('No valid option selected');
-        }
-      })
-      .then(() => {
-        return this.run(); 
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        case 'Add Department':
+          await addDepartment();
+          break;
+          
+        case 'DELETE!':
+          await del(); 
+          break;
+
+        default: 
+          console.log('No valid option selected');
+      }
+      this.run();
+      
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 }
 

@@ -1,14 +1,14 @@
 const inquirer = require('inquirer');
-const pool = require('./db');
+const pool = require('../db/pool');
 
 async function addEmployee() {
   try {
     // Fetch roles from database
-    const rolesResult = await pool.query('SELECT id, title FROM roles');
+    const rolesResult = await pool.query('SELECT id, title FROM role');
     const roles = rolesResult.rows;
 
     // Fetch managers from database
-    const managersResult = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employees WHERE manager_id IS NULL');
+    const managersResult = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employee WHERE manager_id IS NULL');
     const managers = managersResult.rows;
 
     // Convert roles and managers to choice format
@@ -46,7 +46,7 @@ async function addEmployee() {
 
     // Insert new employee into the database
     await pool.query(
-      'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
+      'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
       [firstName, lastName, roleId, managerId]
     );
 

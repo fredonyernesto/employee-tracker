@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const pool = require('./db');
+const pool = require('../db/pool');
 
 async function addRole() {
   try {
@@ -34,7 +34,7 @@ async function addRole() {
 
     // Insert the new role into the database
     await pool.query(
-      'INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3)',
+      'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)',
       [roleName, salary, departmentId]
     );
 

@@ -1,15 +1,15 @@
 const inquirer = require('inquirer');
-const pool = require('./db');
+const pool = require('../db/pool');
 
 async function del() {
   try {
     const departmentResults = await pool.query('SELECT id, name FROM department');
     const departments = departmentResults.rows;
 
-    const rolesResult = await pool.query('SELECT id, title FROM roles');
+    const rolesResult = await pool.query('SELECT id, title FROM role');
     const roles = rolesResult.rows;
 
-    const employeeResults = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employees');
+    const employeeResults = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employee');
     const employees = employeeResults.rows;
 
     const roleChoices = roles.map(role => ({ name: role.title, value: role.id }));
@@ -58,7 +58,7 @@ async function del() {
         ]);
 
         await pool.query(
-          'DELETE FROM roles WHERE id = $1',
+          'DELETE FROM role WHERE id = $1',
           [roleList]
         );
         console.log('Role successfully deleted');
@@ -75,7 +75,7 @@ async function del() {
         ]);
 
         await pool.query(
-          'DELETE FROM employees WHERE id = $1',
+          'DELETE FROM employee WHERE id = $1',
           [employeeList]
         );
         console.log('Employee successfully deleted');

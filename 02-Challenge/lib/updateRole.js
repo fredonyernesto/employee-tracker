@@ -1,14 +1,14 @@
 const inquirer = require('inquirer');
-const pool = require('./db');
+const pool = require('../db/pool');
 
 async function updateRole() {
   try {
     // Fetch roles from the database
-    const rolesResult = await pool.query('SELECT id, title FROM roles');
+    const rolesResult = await pool.query('SELECT id, title FROM role');
     const roles = rolesResult.rows;
 
     // Fetch employees from the database
-    const employeeResults = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employees');
+    const employeeResults = await pool.query('SELECT id, CONCAT(first_name, \' \', last_name) AS name FROM employee');
     const employees = employeeResults.rows;
 
     // Convert roles and employees to choice format
@@ -35,7 +35,7 @@ async function updateRole() {
 
     // Update the employee's role in the database
     await pool.query(
-      'UPDATE employees SET role_id = $1 WHERE id = $2',
+      'UPDATE employee SET role_id = $1 WHERE id = $2',
       [roleId, employeeId] 
     );
 
