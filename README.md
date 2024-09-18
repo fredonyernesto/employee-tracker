@@ -29,7 +29,5 @@ For questions, suggestions, or further information, reach out via email at [fred
 Check out the repository for this project [here](https://github.com/fredonyernesto/employee-tracker).
 
 ## Walkthrough Video
-A walkthrough video demonstrating the functionality of the Employee Tracker application can be viewed [here](https://link-to-your-video).
+A walkthrough video demonstrating the functionality of the Employee Tracker application can be viewed [here](https://watch.screencastify.com/v/cZ0Fv8FZAwrPfrP01S5b).
 
-## Screenshots
-![Employee Tracker Screenshot](link-to-screenshot.png)
